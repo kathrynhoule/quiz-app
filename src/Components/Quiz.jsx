@@ -3,7 +3,7 @@ import { QuizContext } from "../Extras/Contexts";
 import {questions} from '../Extras/QuestionBank';
 
 function Quiz() {
-     const { score, setScore } = useContext(QuizContext);
+     const { score, setScore, setGameState } = useContext(QuizContext);
 
      const [currQuestion, setCurrQuestion] = useState(0);
      const [optionChosen, setOptionChosen] = useState("");
@@ -12,8 +12,14 @@ function Quiz() {
           if (questions[currQuestion].answer === optionChosen) {
                setScore(prevScore => prevScore + 1);
           }
-          alert(score);
           setCurrQuestion(currQuestion + 1);
+     }
+
+     const finishQuiz = () => {
+          if (questions[currQuestion].answer === optionChosen) {
+               setScore(prevScore => prevScore + 1);
+          }
+          setGameState("endScreen");
      }
 
      return (
@@ -25,8 +31,12 @@ function Quiz() {
                     <button onClick={() => setOptionChosen("C")}>{questions[currQuestion].optionC}</button>
                     <button onClick={() => setOptionChosen("D")}>{questions[currQuestion].optionD}</button>
                </div>
-
+               
+               {currQuestion === questions.length - 1 ? (
+                    <button onClick={finishQuiz}>Finish Quiz</button>
+               ) : (
                <button onClick={nextQuestion}>Next Question</button>
+               )}
           </div>
      );
 }
